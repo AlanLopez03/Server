@@ -135,6 +135,22 @@ class ProductoController
         }
     }
 
+    public async buscar_producto(req: Request, res: Response): Promise <void>
+    {
+        const {nombre} = req.params;
+        console.log ("Buscar: ", nombre);
+        const respuesta = await pool.query('SELECT idProducto, nombre, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
+        if(respuesta.length>0)
+        {
+            res.json(respuesta);
+        }
+        else
+        {
+            res.json({"id_producto":"-1"});
+        }
+    
+    }
+
 }
 
 export const productoController = new ProductoController();
