@@ -120,5 +120,18 @@ class ProductoController {
             }
         });
     }
+    buscar_producto(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { nombre } = req.params;
+            console.log("Buscar: ", nombre);
+            const respuesta = yield database_1.default.query('SELECT idProducto, nombre, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
+            if (respuesta.length > 0) {
+                res.json(respuesta);
+            }
+            else {
+                res.json({ "id_producto": "-1" });
+            }
+        });
+    }
 }
 exports.productoController = new ProductoController();
