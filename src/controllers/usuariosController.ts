@@ -45,6 +45,15 @@ class UsuariosController
         res.json(false);
     }
 
+    public async obtenerUsuarioCorreo(req: Request, res: Response): Promise<void> {
+        const { correo } = req.params;
+        const resp = await pool.query(`SELECT * FROM usuarios WHERE correo = '${correo}'`);
+        if(resp.length>0)
+            res.json(resp);
+        else
+            res.json({"id_Rol":"-1"});
+    }
+
     public async create(req: Request, res: Response): Promise<void> {
     
     const salt = await bcrypt.genSalt(10);

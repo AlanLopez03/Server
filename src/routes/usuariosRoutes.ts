@@ -15,6 +15,7 @@ class UsuariosRoutes{
         this.router.get('/recomendaciones/:id', usuariosController.recomendaciones)
         this.router.get('/', usuariosController.list );
         this.router.get('/:id', usuariosController.listOne );
+        this.router.get('/obtenerUsuarioCorreo/:correo', usuariosController.obtenerUsuarioCorreo);//Para buscar por correo
         this.router.get('/verPedidos/:id', usuariosController.verPedidos );
         this.router.get('/rastrearPedidos/:id', usuariosController.rastrearPedidos );
         this.router.post('/buscarUsuario', usuariosController.buscarUsuarioporAtributo );

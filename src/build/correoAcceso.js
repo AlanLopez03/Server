@@ -1,30 +1,46 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.usuariosController = void 0;
+class CorreoController {
+}
+exports.usuariosController = new CorreoController();
+const dotenv_1 = __importDefault(require("dotenv"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+dotenv_1.default.config();
 var email = require("emailjs/email");
-console.log("hola");
-module.exports = (formulario) => {
+function enviarCorreo(body) {
     var server = email.server.connect({
         user: "destellojoyeria3@gmail.com",
         password: "vbuc itgi wucg cava",
         host: "smtp.gmail.com",
-        ssl: true,
+        tls: {
+            rejectUnauthorized: false
+        }
     });
-    console.log("formulario.correo: " + formulario.correo);
-    var message = {};
-    message = {
+    //Tokenizamos el correo para poder ponerlo en la liga
+    var correo = body.Email;
+    const token = jsonwebtoken_1.default.sign(correo, process.env.TOKEN_SECRET || 'prueba');
+    console.log(token);
+    var message = {
         from: "destellojoyeria3@gmail.com",
-        to: formulario.correo,
-        bcc: "",
+        to: "<" + body.Email + ">",
+        bbc: "",
         subject: "Reestablece tu contraseña",
         attachment: [
-            { data: `Hemos recibido una solicitud para reestablecer tu contraseña.
-            Da click en el siguiente enlace:
-
-            https://zoominformatica.com/blog/como-configurar-email-a-traves-de-una-contrasena-de-aplicacion-google/#google_vignette
-
-            
-            Si no fuiste tu, ignora este correo.`, alternative: true }
+            { data: `Hemos recibido una solicitud para reestablecer tu contraseña.<p>
+            <a href="http://localhost:4200/reestablecerContrasena/${token}">Click Aquí<a/>`, alternative: true }
         ]
     };
-    server.send(message, function (err, message) { console.log(err); });
-    console.log("Llega despues.");
-};
+    server.send(message, function (err, message) {
+        if (err) {
+            console.error("Error sending email:", err);
+        }
+        else {
+            console.log("Email sent successfully!");
+        }
+    });
+}
+module.exports = enviarCorreo;

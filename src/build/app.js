@@ -21,13 +21,14 @@ const database_1 = __importDefault(require("./database"));
 const correoAcceso = require('./correoAcceso');
 class Server {
     constructor() {
-        this.queryProfesor = (decodificado) => {
+        this.queryUser = (decode) => {
             return new Promise((resolve, reject) => {
-                let consulta = 'SELECT * FROM profesores WHERE correo="' + decodificado + '"';
-                database_1.default.query(consulta, (error, results) => {
-                    if (error)
-                        return reject(error);
-                    return resolve(results);
+                let query = 'SELECT * FROM users WHERE email ="' + decode + '"';
+                database_1.default.query(query, (err, result) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    return resolve(result);
                 });
             });
         };
@@ -45,28 +46,31 @@ class Server {
         this.app.use(express_1.default.urlencoded({ extended: false }));
     }
     routes() {
-        this.app.post('/enviarCorreoRecuperarContrasenya', (req) => {
-            console.log("app req.body: " + req.body.correo);
+        this.app.post('/enviarCorreoRecuperarContrasena', (req, res) => {
+            console.log(req.body);
             correoAcceso(req.body);
+            res.json();
         });
-        this.app.post('/decodificarMail', (req, res) => __awaiter(this, void 0, void 0, function* () {
-            let decodificado;
+        this.app.post('/decodificarEmail', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            let decode;
             try {
-                decodificado = jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET || 'prueba');
-                const result1 = yield this.queryProfesor(decodificado);
-                if (result1.length == 0)
+                decode = jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET || 'test');
+                const result1 = yield this.queryUser(decode);
+                if (result1.length == 0) {
                     res.json(0);
-                else
+                }
+                else {
                     res.json(result1[0]);
+                }
             }
-            catch (err) {
+            catch (error) {
                 res.json(0);
             }
         }));
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
-            console.log(`Listening on port ${this.app.get('port')}`);
+            console.log('Server on port', this.app.get('port'));
         });
     }
 }
