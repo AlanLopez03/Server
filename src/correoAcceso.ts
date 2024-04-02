@@ -1,7 +1,8 @@
 var email = require("emailjs/email");
-console.log("hola");
+import jwt from 'jsonwebtoken';
 
 module.exports = (formulario: any) => {
+    var token = jwt.sign(formulario.correo, process.env.TOKEN_SECRET || 'tokentest')
     var server = email.server.connect(
     {
         user: "destellojoyeria3@gmail.com",
@@ -20,7 +21,7 @@ module.exports = (formulario: any) => {
             { data: `Hemos recibido una solicitud para reestablecer tu contraseña.
             Da click en el siguiente enlace:
 
-            https://zoominformatica.com/blog/como-configurar-email-a-traves-de-una-contrasena-de-aplicacion-google/#google_vignette
+            <a href="http://localhost:4200/restablecerPassword/${token}">Reestablecer contraseña </a>
 
             
             Si no fuiste tu, ignora este correo.`, alternative: true }

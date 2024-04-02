@@ -131,6 +131,34 @@ class UsuariosController
         res.json(false);
     }
 
+    public async existeCorreo(req: Request, res: Response):Promise<void>{
+        const {correo} = req.body;
+        const resp = await pool.query("SELECT * FROM usuarios WHERE correo = ?",correo);
+        if (resp.length>0){
+            res.json(resp);
+            return;
+        }
+        res.json(null);
+    }
+
+    public async actualizarPassword(req: Request, res: Response): Promise<void> {
+        const {token} = req.params;
+        //Destokenizamos
+        const decoded = decodeJWT(token);
+        console.log(decoded);
+    
+        const salt = await bcrypt.genSalt(10);
+        req.body.password = await bcrypt.hash(req.body.password, salt)
+        const resp = await pool.query("UPDATE usuarios set ? WHERE correo = ?", [req.body, decoded]);
+        res.json(resp);
+    }
+
+
+
+}
+
+function decodeJWT(token:any) {
+    return (Buffer.from(token.split('.')[1], 'base64').toString());
 }
 
 export const usuariosController = new UsuariosController();

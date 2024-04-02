@@ -19,6 +19,8 @@ class UsuariosRoutes{
         this.router.get('/rastrearPedidos/:id', usuariosController.rastrearPedidos );
         this.router.post('/buscarUsuario', usuariosController.buscarUsuarioporAtributo );
         this.router.get('/login/:correo/:password',  usuariosController.login );
+        this.router.post('/existeC',  usuariosController.existeCorreo );
+        this.router.put('/reestablecerPassword/:token',usuariosController.actualizarPassword);
         //this.router.post('/modificarEstadoPedido/:id', usuariosController.modificarEstadoPedido );
         }
 }
