@@ -137,5 +137,31 @@ class UsuariosController {
             res.json(false);
         });
     }
+    existeCorreo(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { correo } = req.body;
+            const resp = yield database_1.default.query("SELECT * FROM usuarios WHERE correo = ?", correo);
+            if (resp.length > 0) {
+                res.json(resp);
+                return;
+            }
+            res.json(null);
+        });
+    }
+    actualizarPassword(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { token } = req.params;
+            //Destokenizamos
+            const decoded = decodeJWT(token);
+            console.log(decoded);
+            const salt = yield bcryptjs_1.default.genSalt(10);
+            req.body.password = yield bcryptjs_1.default.hash(req.body.password, salt);
+            const resp = yield database_1.default.query("UPDATE usuarios set ? WHERE correo = ?", [req.body, decoded]);
+            res.json(resp);
+        });
+    }
+}
+function decodeJWT(token) {
+    return (Buffer.from(token.split('.')[1], 'base64').toString());
 }
 exports.usuariosController = new UsuariosController();
