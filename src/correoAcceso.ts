@@ -1,6 +1,5 @@
 var email = require("emailjs/email");
 console.log("hola");
-
 module.exports = (formulario: any) => {
     var server = email.server.connect(
     {
@@ -19,10 +18,7 @@ module.exports = (formulario: any) => {
         attachment: [
             { data: `Hemos recibido una solicitud para reestablecer tu contraseña.
             Da click en el siguiente enlace:
-
             https://zoominformatica.com/blog/como-configurar-email-a-traves-de-una-contrasena-de-aplicacion-google/#google_vignette
-
-            
             Si no fuiste tu, ignora este correo.`, alternative: true }
         ]
     };
