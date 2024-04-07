@@ -55,7 +55,7 @@ class CompraController {
     crearCompra(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id } = req.params; //id dek cliente
+                const { id } = req.params; //id del cliente
                 const { fecha } = req.body;
                 const { idEdo } = req.body;
                 const productosVendidos = yield database_1.default.query("SELECT ca.idProducto, ca.cantidad FROM carrito ca WHERE ca.idCliente = ?", [id]); //productos que se van a comprar
@@ -65,7 +65,8 @@ class CompraController {
                     fecha: req.body.fecha,
                     monto: total,
                     idEdo: req.body.idEdo,
-                    idCliente: id
+                    idCliente: id,
+                    idDomicilio: req.body.idDomicilio
                 };
                 const respuesta = yield database_1.default.query("INSERT INTO compra set ? ", [compraData]);
                 const idCompra = respuesta.insertId;
@@ -74,8 +75,8 @@ class CompraController {
                         //Insertar en la tabla pedido por cada producto
                         //Habria que multiplicarlo por el descuento
                         var precio = yield database_1.default.query("SELECT precio  from producto where idProducto = ?", [producto.idProducto]);
-                        console.log(precio[0].precio);
-                        console.log("Cantidad=", producto.cantidad);
+                        //console.log(precio[0].precio);
+                        //console.log("Cantidad=",producto.cantidad)
                         yield database_1.default.query("INSERT INTO pedido (cantidadProducto,subtotal,idCompra,idProducto) values(?,?,?,?) ", [producto.cantidad, producto.cantidad * precio[0].precio, idCompra, producto.idProducto]);
                         yield database_1.default.query("UPDATE producto SET stock = stock - ? WHERE idProducto = ?", [producto.cantidad, producto.idProducto]);
                     }
@@ -100,7 +101,7 @@ class CompraController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            console.log(req.params);
+            //console.log(req.params);
             //console.log(id)
             const resp = yield database_1.default.query("UPDATE compra set ? WHERE idCompra = ?", [req.body, id]);
             res.json(resp);
@@ -137,7 +138,7 @@ class CompraController {
                 res.status(404).json({ 'mensaje': 'No hay productos' });
             }
             else {
-                console.log(fechaInicio);
+                //console.log(fechaInicio);
                 const respuesta = yield database_1.default.query("SELECT pe.idProducto,SUM(pe.cantidadProducto) AS totalVendido FROM pedido pe join compra co on co.idCompra=pe.idCompra where co.fecha between ? AND ? GROUP BY idProducto ORDER BY totalVendido ASC LIMIT 10", [fechaInicio, fechaFin]);
                 if (respuesta.length > 0) {
                     res.json(respuesta);

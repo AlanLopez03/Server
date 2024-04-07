@@ -6,6 +6,19 @@ public async list(req: Request, res: Response ): Promise<void>{
     const respuesta = await pool.query('SELECT * FROM domicilio');
     res.json( respuesta );
 }
+public async verDatosDomicilio(req: Request, res: Response): Promise <void>{
+    const {id} = req.params;
+    const respuesta = await pool.query('SELECT * FROM domicilio WHERE idDomicilio = ?', [id]);
+    if(respuesta.length>0)
+    {
+    res.json(respuesta[0]);
+    return ;
+    }
+    else
+        res.json(false);    
+    
+}
+
 
 public async listOne(req: Request, res: Response): Promise <void>{
 const {id} = req.params;
@@ -23,7 +36,7 @@ public async verDomiciliosCliente(req: Request, res: Response): Promise <void>{
     if(respuesta.length>0)
     {
     res.json(respuesta);
-    console.log(respuesta);
+    //console.log(respuesta);
     return ;
     }
     res.json(false);}
@@ -45,7 +58,7 @@ res.json(resp);
 
 public async update(req: Request, res: Response): Promise<void> {
 const { id } = req.params;
-console.log(req.params);
+//console.log(req.params);
 //console.log(id)
 const resp = await pool.query("UPDATE domicilio set ? WHERE idDomicilio = ?", [req.body, id]);
 res.json(resp);
