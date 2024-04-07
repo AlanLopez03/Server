@@ -49,9 +49,10 @@ public async crearCompra(req: Request, res: Response): Promise<void>
 {
     try
     {
-    const {id} = req.params;//id dek cliente
+    const {id} = req.params;//id del cliente
     const {fecha} = req.body;
     const {idEdo} = req.body;
+
     const productosVendidos = await pool.query("SELECT ca.idProducto, ca.cantidad FROM carrito ca WHERE ca.idCliente = ?",[id]);//productos que se van a comprar
     const busca = await pool.query("SELECT SUM(ca.cantidad * pro.precio * (pro.descuento)) AS total FROM carrito ca JOIN producto pro ON pro.idProducto = ca.idProducto WHERE ca.idCliente = ?",[id]);//total de la compra
     const total =busca[0].total;
@@ -59,7 +60,8 @@ public async crearCompra(req: Request, res: Response): Promise<void>
         fecha: req.body.fecha,
         monto: total,
         idEdo: req.body.idEdo,
-        idCliente: id
+        idCliente: id,
+        idDomicilio: req.body.idDomicilio
     };
     const respuesta = await pool.query("INSERT INTO compra set ? ",[compraData]);
     const idCompra = respuesta.insertId;  
@@ -68,8 +70,8 @@ public async crearCompra(req: Request, res: Response): Promise<void>
             //Insertar en la tabla pedido por cada producto
             //Habria que multiplicarlo por el descuento
             var precio=await pool.query("SELECT precio  from producto where idProducto = ?",[producto.idProducto]);
-            console.log(precio[0].precio);
-            console.log("Cantidad=",producto.cantidad)
+            //console.log(precio[0].precio);
+            //console.log("Cantidad=",producto.cantidad)
             await pool.query("INSERT INTO pedido (cantidadProducto,subtotal,idCompra,idProducto) values(?,?,?,?) ",[producto.cantidad,producto.cantidad*precio[0].precio,idCompra, producto.idProducto]);
 
             await pool.query("UPDATE producto SET stock = stock - ? WHERE idProducto = ?",[producto.cantidad, producto.idProducto]);
@@ -102,7 +104,7 @@ public async list(req: Request, res: Response ): Promise<void>
 
 public async update(req: Request, res: Response): Promise<void> {
 const { id } = req.params;
-console.log(req.params);
+//console.log(req.params);
 //console.log(id)
 const resp = await pool.query("UPDATE compra set ? WHERE idCompra = ?", [req.body, id]);
 res.json(resp);
@@ -139,7 +141,7 @@ public async verMasVendidos(req: Request, res: Response): Promise <void>{
     }
     else
     {
-        console.log(fechaInicio);
+        //console.log(fechaInicio);
         const respuesta = await pool.query("SELECT pe.idProducto,SUM(pe.cantidadProducto) AS totalVendido FROM pedido pe join compra co on co.idCompra=pe.idCompra where co.fecha between ? AND ? GROUP BY idProducto ORDER BY totalVendido ASC LIMIT 10",[fechaInicio,fechaFin]);
         if(respuesta.length>0)
         {

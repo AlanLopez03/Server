@@ -21,6 +21,18 @@ class DomicilioController {
             res.json(respuesta);
         });
     }
+    verDatosDomicilio(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const respuesta = yield database_1.default.query('SELECT * FROM domicilio WHERE idDomicilio = ?', [id]);
+            if (respuesta.length > 0) {
+                res.json(respuesta[0]);
+                return;
+            }
+            else
+                res.json(false);
+        });
+    }
     listOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
@@ -38,7 +50,7 @@ class DomicilioController {
             const respuesta = yield database_1.default.query('SELECT * FROM domicilio WHERE idCliente = ?', [id]);
             if (respuesta.length > 0) {
                 res.json(respuesta);
-                console.log(respuesta);
+                //console.log(respuesta);
                 return;
             }
             res.json(false);
@@ -64,7 +76,7 @@ class DomicilioController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            console.log(req.params);
+            //console.log(req.params);
             //console.log(id)
             const resp = yield database_1.default.query("UPDATE domicilio set ? WHERE idDomicilio = ?", [req.body, id]);
             res.json(resp);
