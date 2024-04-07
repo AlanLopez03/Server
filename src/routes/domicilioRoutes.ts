@@ -15,6 +15,7 @@ class DomicilioRoutes{
         this.router.get('/', domicilioController.list );
         this.router.get('/:id', domicilioController.listOne );
         this.router.get('/direccion/:id', domicilioController.listDom );
+        this.router.get('/verDomiciliosCliente/:id', domicilioController.verDomiciliosCliente );
         }
 }
 const domicilioRoutes= new DomicilioRoutes();

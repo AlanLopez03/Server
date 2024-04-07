@@ -29,7 +29,19 @@ class DomicilioController {
                 res.json(respuesta);
                 return;
             }
-            res.status(404).json({ 'mensaje': 'Domicilio no encontrado' });
+            res.json(false);
+        });
+    }
+    verDomiciliosCliente(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const respuesta = yield database_1.default.query('SELECT * FROM domicilio WHERE idCliente = ?', [id]);
+            if (respuesta.length > 0) {
+                res.json(respuesta);
+                console.log(respuesta);
+                return;
+            }
+            res.json(false);
         });
     }
     listDom(req, res) {

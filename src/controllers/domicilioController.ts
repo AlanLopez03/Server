@@ -10,12 +10,23 @@ public async list(req: Request, res: Response ): Promise<void>{
 public async listOne(req: Request, res: Response): Promise <void>{
 const {id} = req.params;
 const respuesta = await pool.query('SELECT * FROM domicilio WHERE idCliente = ?', [id]);
-if(respuesta.length>0){
+if(respuesta.length>0)
+{
 res.json(respuesta);
 return ;
 }
-res.status(404).json({'mensaje': 'Domicilio no encontrado'});
+res.json(false);
 }
+public async verDomiciliosCliente(req: Request, res: Response): Promise <void>{
+    const {id} = req.params;
+    const respuesta = await pool.query('SELECT * FROM domicilio WHERE idCliente = ?', [id]);
+    if(respuesta.length>0)
+    {
+    res.json(respuesta);
+    console.log(respuesta);
+    return ;
+    }
+    res.json(false);}
 
 public async listDom(req: Request, res: Response): Promise <void>{
     const {id} = req.params;
