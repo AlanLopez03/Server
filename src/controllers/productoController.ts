@@ -62,9 +62,24 @@ class ProductoController
 
     public async delete(req: Request, res: Response): Promise<void> 
     {
-        const { id } = req.params;
-        const resp = await pool.query("DELETE FROM producto WHERE idProducto =?",[id]);
-        res.json(resp);
+        try {
+            const { id } = req.params;
+            const resp4 = await pool.query("UPDATE compra SET monto = monto - ( (SELECT precio FROM producto WHERE idProducto = ?) * (SELECT pedido.cantidadProducto FROM pedido where pedido.idCompra = compra.idCompra and pedido.idProducto= ?)) WHERE idCompra IN (SELECT idCompra FROM pedido WHERE idProducto = ?)", [id, id, id]);
+            const resp1 = await pool.query("DELETE compra FROM compra WHERE compra.monto = 0");
+            const resp2 = await pool.query("DELETE FROM pedido WHERE pedido.idProducto = ?", [id]);
+            const resp3 = await pool.query("DELETE FROM producto WHERE idProducto = ?", [id]);
+            const combinedResponse = {
+                respuesta2: resp4,
+                respuesta3: resp1,
+                respuesta4: resp2,
+                respuesta5: resp3,
+            };
+            res.json(combinedResponse);
+            
+          } catch (error) {
+            console.error('Error al ejecutar las consultas:', error);
+            res.status(500).json({ error: 'Error al ejecutar las consultas' });
+        }
     }
 
     public async aplicarDescuento(req: Request, res: Response): Promise<void> 

@@ -75,9 +75,24 @@ class ProductoController {
     }
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            const resp = yield database_1.default.query("DELETE FROM producto WHERE idProducto =?", [id]);
-            res.json(resp);
+            try {
+                const { id } = req.params;
+                const resp4 = yield database_1.default.query("UPDATE compra SET monto = monto - ( (SELECT precio FROM producto WHERE idProducto = ?) * (SELECT pedido.cantidadProducto FROM pedido where pedido.idCompra = compra.idCompra and pedido.idProducto= ?)) WHERE idCompra IN (SELECT idCompra FROM pedido WHERE idProducto = ?)", [id, id, id]);
+                const resp1 = yield database_1.default.query("DELETE compra FROM compra WHERE compra.monto = 0");
+                const resp2 = yield database_1.default.query("DELETE FROM pedido WHERE pedido.idProducto = ?", [id]);
+                const resp3 = yield database_1.default.query("DELETE FROM producto WHERE idProducto = ?", [id]);
+                const combinedResponse = {
+                    respuesta2: resp4,
+                    respuesta3: resp1,
+                    respuesta4: resp2,
+                    respuesta5: resp3,
+                };
+                res.json(combinedResponse);
+            }
+            catch (error) {
+                console.error('Error al ejecutar las consultas:', error);
+                res.status(500).json({ error: 'Error al ejecutar las consultas' });
+            }
         });
     }
     aplicarDescuento(req, res) {
