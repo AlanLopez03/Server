@@ -943,7 +943,7 @@
             "delete": {
                 "tags": ["Productos"],
                 "summary": "Producto en especifico",
-                "description": "<p>Servicio que elimina un producto del sistema mediante su id.</p>",
+                "description": "<p>Servicio que elimina un producto del sistema mediante su id, ademas de esto, dentro de este mismo servicio se eliminan todos los registros de las ventas de este productos, si la compra lleva mas de un producto y por alguna razón se elimina alguno de esos dos productos se le resta a compra la cantidad equivalente al producto comprado y eliminado.</p>",
                 "responses": {
                     "200": {
                         "description": "OK"
