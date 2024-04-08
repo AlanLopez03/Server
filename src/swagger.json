@@ -252,6 +252,36 @@
                 }
             }
         },
+        "/api/usuarios/existeC": {
+            "post": {
+                "tags": ["Usuarios"],
+                "summary": "Busca un usuario", 
+                "description": "<p>Servicio que devuelve los datos del usuario por el correo</p>",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Correo",
+                        "in": "body",
+                        "description": "Correo a buscar",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BuscarC"
+                        }
+                    }
+                ],
+                "tag": ["Usuarios"],
+                "responses": {
+                    "200": {
+                        "description": "devuelve un arreglo con todos los usuarios con coincidencia en el nombre"
+                    },
+                    "404": {
+                        "description": "falso"
+                    }
+                }
+            }
+        },
         "/api/usuarios/recomendaciones/{id}": {
             "get": {
                 "tags": ["Usuarios"],
@@ -344,6 +374,41 @@
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/nuevoUsuario"
+                        }
+                    }
+                ],
+                "tags": ["Usuarios"],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                }
+            }
+        },
+        "/api/usuarios/reestablecerPassword/{token}": {
+            "put": {
+                "summary": "Modifica los datos de un usuario",
+                "operationId": "update",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "description": "token del correo del usuario",
+                        "required": true,
+                        "default": 10
+                    },
+                    {
+                        "name": "Usuario",
+                        "in": "body",
+                        "description": "usuario...",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reestablecer"
                         }
                     }
                 ],
@@ -708,6 +773,47 @@
                 ]
             }
         },
+        "/api/domicilios/direccion/{id}": {
+            "get": {
+                "tags": ["Domicilios"],
+                "summary": "Mostrando un domicilio",
+                "description": "<p>Servicio que devuelve la información detallada de un domicilio en específico.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "idDomicilio": 1,
+                                    "calle": "Calle 1",
+                                    "colonia": "Colonia 1",
+                                    "ciudad": "Ciudad 1",
+                                    "estado": "Estado 1",
+                                    "cp": "12345",
+                                    "idCliente": 1
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Domicilio"
+                        }
+                    },
+                    "403": {
+                        "description": "Prohibido"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id ",
+                        "in": "path",
+                        "required": true,
+                        "description": "id del cliente",
+                        "type": "number",
+                        "default": "1"
+                    }
+                ]
+            }
+        },
         "/api/domicilios/eliminar/{id}": {
             "delete": {
                 "tags": ["Domicilios"],
@@ -967,7 +1073,7 @@
             "delete": {
                 "tags": ["Productos"],
                 "summary": "Producto en especifico",
-                "description": "<p>Servicio que elimina un producto del sistema mediante su id.</p>",
+                "description": "<p>Servicio que elimina un producto del sistema mediante su id, ademas de esto, dentro de este mismo servicio se eliminan todos los registros de las ventas de este productos, si la compra lleva mas de un producto y por alguna razón se elimina alguno de esos dos productos se le resta a compra la cantidad equivalente al producto comprado y eliminado.</p>",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -2745,6 +2851,15 @@
                 }
             }
         },
+        "BuscarC":{
+            "type": "object",
+            "properties":{
+                "correo":{
+                    "type": "Text",
+                    "description": "Correo a buscar"
+                }
+            }
+        },
         "login":{
             "type":"object",
             "properties":{
@@ -3409,8 +3524,15 @@
             "items":{
                 "$ref":"#/definitions/getCarrito"
             }
-        }
+        },
         
+        "reestablecer":{
+            "type":"object",
+            "properties":{
+                "password":"Text",
+                "descripcion":"Nueva contraseña"
+            }
+        }
 
 
 
