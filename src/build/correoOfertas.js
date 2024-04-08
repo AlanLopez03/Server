@@ -35,5 +35,5 @@ module.exports = (productos, correo) => {
         ]
     };
     server.send(message, function (err, message) { console.log(err); });
-    //console.log("Correo enviado después de construir el cuerpo.");
+    console.log("Correo enviado después de construir el cuerpo.");
 };

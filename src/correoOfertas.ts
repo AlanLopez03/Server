@@ -42,5 +42,5 @@ module.exports = (productos: any[], correo: string) => {
     };
 
     server.send(message, function (err: any, message: any) { console.log(err); });
-    //console.log("Correo enviado después de construir el cuerpo.");
+    console.log("Correo enviado después de construir el cuerpo.");
 }
