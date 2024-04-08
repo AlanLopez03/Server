@@ -23,7 +23,7 @@ module.exports = (formulario) => {
         attachment: [
             { data: `Hemos recibido una solicitud para reestablecer tu contraseña.
             Da click en el siguiente enlace:
-            <a href="http://localhost:4200/restablecerPassword/${token}">Reestablecer contraseña </a>
+            <a href="https://online--ephemeral-youtiao-d28fc8.netlify.app/${token}">Reestablecer contraseña </a>
             Si no fuiste tu, ignora este correo.`, alternative: true }
         ]
     };
