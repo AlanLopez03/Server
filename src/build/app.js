@@ -19,6 +19,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const database_1 = __importDefault(require("./database"));
 const correoAcceso = require('./correoAcceso');
+const correoOfertas = require('./correoOfertas');
 class Server {
     constructor() {
         this.queryProfesor = (decodificado) => {
@@ -37,17 +38,22 @@ class Server {
         this.routes();
     }
     config() {
-        this.app.use(express_1.default.urlencoded({ limit: '50mb', parameterLimit: 100000, extended: false }));
         this.app.use(express_1.default.json({ limit: '50mb' }));
+        this.app.use(express_1.default.urlencoded({ limit: '50mb', parameterLimit: 100000, extended: false }));
         this.app.set('port', process.env.PORT || 3001);
         this.app.use((0, morgan_1.default)('dev'));
         this.app.use((0, cors_1.default)());
-        this.app.use(express_1.default.urlencoded({ extended: false }));
     }
     routes() {
         this.app.post('/enviarCorreoRecuperarContrasenya', (req) => {
             console.log("app req.body: " + req.body.correo);
             correoAcceso(req.body);
+        });
+        this.app.post('/enviarCorreoOferta', (req) => {
+            //console.log("Checando que le llega" ,req);
+            const { productos, correo } = req.body;
+            //console.log ("Productoooooooooooooos",productos);
+            correoOfertas(productos, correo);
         });
         this.app.post('/decodificarMail', (req, res) => __awaiter(this, void 0, void 0, function* () {
             let decodificado;

@@ -6,6 +6,9 @@ import dotenv from 'dotenv';
 import pool from "./database";
 
 const correoAcceso = require('./correoAcceso');
+const correoOfertas = require ('./correoOfertas');
+
+
 class Server
 {
     public app: Application;
@@ -16,15 +19,14 @@ class Server
         this.config();
         this.routes();
     }
-    config(): void
-    {
-        this.app.use(express.urlencoded({limit: '50mb',parameterLimit: 100000,extended: false}));
-        this.app.use(express.json({limit: '50mb'}));
+    config(): void {
+        this.app.use(express.json({ limit: '50mb' }));
+        this.app.use(express.urlencoded({ limit: '50mb', parameterLimit: 100000, extended: false }));
         this.app.set('port', process.env.PORT || 3001);
         this.app.use(morgan('dev'));
         this.app.use(cors());
-        this.app.use(express.urlencoded({ extended: false }));
     }
+    
     routes(): void
     {
         this.app.post('/enviarCorreoRecuperarContrasenya', (req) =>
@@ -32,6 +34,15 @@ class Server
             console.log("app req.body: " + req.body.correo);
             correoAcceso(req.body);
         });
+
+        this.app.post('/enviarCorreoOferta', (req) =>
+            {
+                //console.log("Checando que le llega" ,req);
+                const { productos, correo } = req.body;
+                //console.log ("Productoooooooooooooos",productos);
+                correoOfertas(productos, correo);
+            });
+
         this.app.post('/decodificarMail', async (req, res) =>
         {
             let decodificado;
