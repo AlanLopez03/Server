@@ -7,7 +7,8 @@
     "start": "node src/build/index.js",
     "build": "tsc -w",
     "dev": "nodemon src/build/index.js",
-    "correo": "nodemon src/build/app.js"
+    "correo": "nodemon src/build/app.js",
+    "img": "nodemon src/build/imagen.js"
   },
   "keywords": [],
   "author": "",
