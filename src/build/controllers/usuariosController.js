@@ -160,6 +160,15 @@ class UsuariosController {
             res.json(resp);
         });
     }
+    updateFoto(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            console.log(id);
+            const resp = yield database_1.default.query("UPDATE usuarios set foto = 1 WHERE idUsuario = ?", id);
+            console.log("Despues del update de foto");
+            res.json(resp);
+        });
+    }
 }
 function decodeJWT(token) {
     return (Buffer.from(token.split('.')[1], 'base64').toString());

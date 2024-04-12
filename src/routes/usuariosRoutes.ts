@@ -11,6 +11,7 @@ class UsuariosRoutes{
         //Ya funciona el crud
         this.router.post('/crearUsuario', usuariosController.create);
         this.router.put('/actualizar/:id',usuariosController.update);//ya funciona
+        this.router.put('/actualizarFoto/:id',usuariosController.updateFoto);//ya funciona
         this.router.delete('/eliminar/:id',usuariosController.delete);
         this.router.get('/recomendaciones/:id', usuariosController.recomendaciones)
         this.router.get('/', usuariosController.list );

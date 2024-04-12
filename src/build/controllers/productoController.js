@@ -177,5 +177,14 @@ class ProductoController {
             }
         });
     }
+    updateFoto(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            console.log(id);
+            const resp = yield database_1.default.query("UPDATE producto set foto = 1 WHERE idProducto = ?", id);
+            console.log("Despues del update de foto");
+            res.json(resp);
+        });
+    }
 }
 exports.productoController = new ProductoController();

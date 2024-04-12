@@ -10,6 +10,7 @@ class ProductoRoutes {
     config(): void {
         this.router.post('/crearProducto', productoController.create);
         this.router.put('/actualizar/:id', productoController.update);//ya funciona
+        this.router.put('/actualizarFoto/:id', productoController.updateFoto);//ya funciona
         this.router.delete('/eliminar/:id', productoController.delete);
         this.router.get('/verOfertas', productoController.verOfertas);//Por algun motivo debe ir aqui,si no es así no funciona
         this.router.get('/', productoController.list);
