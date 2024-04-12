@@ -34,7 +34,7 @@ class ProductoController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 //const respuesta = await pool.query('SELECT * FROM producto');
-                const respuesta = yield database_1.default.query('SELECT idProducto, nombre, descripcion,stock,precio,descuento,inicio_descuento,fin_descuento,idMaterial,idCategoria,idMarca  FROM producto');
+                const respuesta = yield database_1.default.query('SELECT * FROM producto');
                 res.json(respuesta);
             }
             catch (_a) {
@@ -156,7 +156,7 @@ class ProductoController {
             const categoria = req.params.id;
             //console.log(categoria);
             try {
-                const consulta = yield database_1.default.query('SELECT producto.idProducto, producto.nombre, producto.descripcion,producto.stock,producto.precio,producto.descuento,DATE(inicio_descuento),Date(fin_descuento),producto.idMaterial,producto.idCategoria,producto.idMarca FROM producto where producto.idCategoria = ?', [categoria]);
+                const consulta = yield database_1.default.query('SELECT producto.idProducto, producto.nombre, producto.descripcion,producto.stock,producto.precio,producto.descuento,DATE(inicio_descuento),Date(fin_descuento),producto.idMaterial,producto.idCategoria,producto.idMarca, producto.foto FROM producto where producto.idCategoria = ?', [categoria]);
                 res.json(consulta);
             }
             catch (err) {
@@ -168,7 +168,7 @@ class ProductoController {
         return __awaiter(this, void 0, void 0, function* () {
             const { nombre } = req.params;
             console.log("Buscar: ", nombre);
-            const respuesta = yield database_1.default.query('SELECT idProducto, nombre, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
+            const respuesta = yield database_1.default.query('SELECT idProducto, nombre, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca, foto FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
             if (respuesta.length > 0) {
                 res.json(respuesta);
             }
