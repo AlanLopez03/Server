@@ -50,7 +50,7 @@ class CarritoController{
     public async verCarrito(req: Request, res: Response): Promise <void>{
         const {id} = req.params;
         try
-        {const respuesta = await pool.query("SELECT pro.idProducto,pro.nombre,ca.cantidad,pro.precio,pro.stock,pro.descuento,pro.foto FROM carrito ca join producto pro on pro.idProducto=ca.idProducto   WHERE ca.idCliente = ?", [id]);
+        {const respuesta = await pool.query("SELECT pro.idProducto,pro.nombre,pro.name,ca.cantidad,pro.precio,pro.stock,pro.descuento FROM carrito ca join producto pro on pro.idProducto=ca.idProducto   WHERE ca.idCliente = ?", [id]);
         if (respuesta.length > 0) 
         {
             const carritoConSubtotales = respuesta.map((item: any) => {

@@ -153,13 +153,7 @@ class UsuariosController
         res.json(resp);
     }
 
-    public async updateFoto(req: Request, res: Response): Promise<void> {
-        const { id } = req.params;
-        console.log(id);
-        const resp = await pool.query("UPDATE usuarios set foto = 1 WHERE idUsuario = ?", id);
-        console.log("Despues del update de foto");
-        res.json(resp);
-    }
+
 
 }
 
