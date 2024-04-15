@@ -20,8 +20,8 @@ class ProductoController
     public async list(req: Request, res: Response ): Promise<void>
     {
         try{
-        //const respuesta = await pool.query('SELECT * FROM producto');
-        const respuesta = await pool.query('SELECT idProducto, nombre,name, descripcion,description,stock,precio,descuento,inicio_descuento,fin_descuento,idMaterial,idCategoria,idMarca  FROM producto');
+        const respuesta = await pool.query('SELECT * FROM producto');
+        //const respuesta = await pool.query('SELECT idProducto, nombre,name, descripcion,description,stock,precio,descuento,inicio_descuento,fin_descuento,idMaterial,idCategoria,idMarca,foto  FROM producto');
         res.json( respuesta );
         }
         catch{
@@ -142,7 +142,7 @@ class ProductoController
         const categoria = req.params.id;
         //console.log(categoria);
         try{
-            const consulta = await pool.query('SELECT producto.idProducto, producto.nombre, producto.name, producto.descripcion,producto.stock,producto.precio,producto.descuento,DATE(inicio_descuento),Date(fin_descuento),producto.idMaterial,producto.idCategoria,producto.idMarca FROM producto where producto.idCategoria = ?', [categoria]);
+            const consulta = await pool.query('SELECT producto.idProducto, producto.nombre, producto.name, producto.descripcion,producto.stock,producto.precio,producto.descuento,producto.foto,DATE(inicio_descuento),Date(fin_descuento),producto.idMaterial,producto.idCategoria,producto.idMarca FROM producto where producto.idCategoria = ?', [categoria]);
             res.json(consulta);
         }
         catch(err){
@@ -165,6 +165,14 @@ class ProductoController
         }
     
     }
+    public async updateFoto(req: Request, res: Response): Promise<void> {
+        const { id } = req.params;
+        console.log(id);
+        const resp = await pool.query("UPDATE producto set foto = 1 WHERE idProducto = ?", id);
+        console.log("Despues del update de foto");
+        res.json(resp);
+    }
+
 
 }
 
