@@ -5,4 +5,10 @@ export default{
         password:'M|CY5sAJSF[c}z75u4ffU)+NQ);,h^:W',
         database:'Joyeria'
     }
+    //database:{
+    //    host:'localhost',
+    //    user:'root',
+    //    password:'',
+    //    database:'joyeria'
+    //}
 }
