@@ -8,6 +8,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 class Server {
     constructor() {
         dotenv_1.default.config();
@@ -18,7 +19,7 @@ class Server {
     config() {
         this.app.use(express_1.default.json({ limit: '50mb' }));
         this.app.use(express_1.default.urlencoded({ limit: '50mb', parameterLimit: 100000, extended: false }));
-        this.app.use(express_1.default.static(__dirname + '/img'));
+        this.app.use(express_1.default.static(path_1.default.join(__dirname, 'img')));
         this.app.set('port', process.env.PORT || 3002);
         this.app.use((0, morgan_1.default)('dev'));
         this.app.use((0, cors_1.default)());
@@ -28,14 +29,19 @@ class Server {
             const file = req.body.src;
             const name = req.body.nombre;
             const id = req.body.id;
-            console.log(name);
-            console.log(id);
-            console.log(__dirname);
+            const filePath = path_1.default.join(__dirname, 'img', name, id + '.jpg');
+            console.log("path=", filePath);
             const binaryData = Buffer.from(file.replace(/^data:image\/[a-z]+;base64,/, ""), 'base64').toString('binary'); //Ya guarda por carpetas/pero la carpeta forzosamente debe existir
-            fs_1.default.writeFile(`${__dirname}/img/` + name + '/' + id + '.jpg', binaryData, "binary", (err) => {
-                console.log(err);
+            fs_1.default.writeFile(filePath, binaryData, "binary", (err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send('Error al guardar la imagen');
+                }
+                else {
+                    console.log('Imagen guardada:', filePath);
+                    res.json(true);
+                }
             });
-            res.json({ fileName: id + '.jpg' });
         });
     }
     ;
