@@ -154,7 +154,9 @@ class ProductoController
     {
         const {nombre} = req.params;
         console.log ("Buscar: ", nombre);
-        const respuesta = await pool.query('SELECT * FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
+
+        const respuesta = await pool.query('SELECT idProducto, nombre,name, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca,foto FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
+
         if(respuesta.length>0)
         {
             res.json(respuesta);

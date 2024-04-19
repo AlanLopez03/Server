@@ -168,7 +168,7 @@ class ProductoController {
         return __awaiter(this, void 0, void 0, function* () {
             const { nombre } = req.params;
             console.log("Buscar: ", nombre);
-            const respuesta = yield database_1.default.query('SELECT * FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
+            const respuesta = yield database_1.default.query('SELECT idProducto, nombre,name, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca,foto FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
             if (respuesta.length > 0) {
                 res.json(respuesta);
             }
