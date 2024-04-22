@@ -167,8 +167,14 @@ class ProductoController {
     buscar_producto(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { nombre } = req.params;
+            const { idioma } = req.params;
             console.log("Buscar: ", nombre);
-            const respuesta = yield database_1.default.query('SELECT idProducto, nombre,name, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca,foto FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
+            let respuesta = '';
+            if (idioma == '2')
+                respuesta = yield database_1.default.query('SELECT idProducto, nombre,name, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca,foto FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
+            if (idioma == '1')
+                respuesta = yield database_1.default.query('SELECT idProducto, nombre,name, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca,foto FROM producto WHERE name LIKE ?', [`${nombre}%`]);
+            //const respuesta = await pool.query('SELECT idProducto, nombre,name, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca,foto FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
             if (respuesta.length > 0) {
                 res.json(respuesta);
             }

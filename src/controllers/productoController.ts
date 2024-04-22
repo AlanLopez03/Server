@@ -153,9 +153,14 @@ class ProductoController
     public async buscar_producto(req: Request, res: Response): Promise <void>
     {
         const {nombre} = req.params;
+        const {idioma} = req.params;
         console.log ("Buscar: ", nombre);
-
-        const respuesta = await pool.query('SELECT idProducto, nombre,name, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca,foto FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
+        let respuesta = '';
+        if (idioma == '2')
+            respuesta = await pool.query('SELECT idProducto, nombre,name, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca,foto FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
+        if (idioma == '1')
+            respuesta = await pool.query('SELECT idProducto, nombre,name, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca,foto FROM producto WHERE name LIKE ?', [`${nombre}%`]);
+        //const respuesta = await pool.query('SELECT idProducto, nombre,name, descripcion,stock,precio,descuento,DATE(inicio_descuento),Date(fin_descuento),idMaterial,idCategoria,idMarca,foto FROM producto WHERE nombre LIKE ?', [`${nombre}%`]);
 
         if(respuesta.length>0)
         {
